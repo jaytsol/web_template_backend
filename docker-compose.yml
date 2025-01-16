@@ -1,0 +1,12 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo:6.0.17
+    restart: always
+    ports:
+      - "${MONGO_PORT}:27017"
+    env_file:
+      - .env
+    container_name: "mongodb"
