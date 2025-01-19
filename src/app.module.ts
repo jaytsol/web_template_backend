@@ -3,10 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { redisStore } from 'cache-manager-redis-store';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -27,6 +28,10 @@ import { UsersModule } from './users/users.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })
