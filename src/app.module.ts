@@ -3,8 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { redisStore } from 'cache-manager-redis-store';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { AuthGuard } from './auth/auth.guard';
+import { RolesGuard } from './roles/roles.guard';
 
 @Module({
   imports: [
@@ -16,6 +20,8 @@ import { redisStore } from 'cache-manager-redis-store';
       port: process.env.REDIS_PORT,
       ttl: 100,
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
@@ -23,6 +29,14 @@ import { redisStore } from 'cache-manager-redis-store';
     {
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

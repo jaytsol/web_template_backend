@@ -4,7 +4,7 @@ version: '3.1'
 services:
   mongo:
     image: mongo:6.0.17
-    restart: always
+    restart: unless-stopped
     ports:
       - "${MONGO_PORT}:27017"
     env_file:
@@ -13,6 +13,7 @@ services:
 
   redis:
     image: redis
+    restart: unless-stopped
     ports:
       - 6379:6379
     volumes:
