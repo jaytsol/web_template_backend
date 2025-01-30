@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { UserDAO } from './dao/user.dao';
 import { USER_MODEL } from 'src/providers/constants';
 import { Inject } from '@nestjs/common';
@@ -9,8 +9,12 @@ export class UserRepository {
     private readonly userModel: Model<UserDAO>,
   ) {}
 
-  async findById(id: string): Promise<UserDAO | null> {
+  async findById(id: ObjectId): Promise<UserDAO | null> {
     return this.userModel.findById(id).exec();
+  }
+
+  async findByUserName(username: string): Promise<UserDAO | null> {
+    return this.userModel.findOne({ username }).exec();
   }
 
   async findAll(): Promise<UserDAO[]> {

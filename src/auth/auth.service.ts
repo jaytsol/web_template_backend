@@ -15,7 +15,7 @@ export class AuthService {
   ) {}
 
   async signIn(input: LoginDAO): Promise<{ access_token: string }> {
-    const user = await this.userService.findOne(input.username);
+    const user = await this.userService.findByUserName(input.username);
 
     if (!user) {
       throw new NotFoundException('User not found');

@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Request } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ObjectId } from 'mongoose';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -14,7 +15,7 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: ObjectId) {
     return this.userService.findOne(id);
   }
 
