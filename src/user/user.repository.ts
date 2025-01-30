@@ -13,10 +13,6 @@ export class UserRepository {
     return this.userModel.findById(id).exec();
   }
 
-  async findOne(username: string): Promise<UserDAO | null> {
-    return this.userModel.findOne({ username }).exec();
-  }
-
   async findAll(): Promise<UserDAO[]> {
     return this.userModel.find().exec();
   }

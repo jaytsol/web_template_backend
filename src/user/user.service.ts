@@ -11,11 +11,11 @@ export class UserService {
     return this.userRepository.create(createUserDto);
   }
 
-  async findAll(): Promise<UserDAO[]> {
-    return this.userRepository.findAll();
+  async findOne(id: string): Promise<UserDAO> {
+    return this.userRepository.findById(id);
   }
 
-  async findOne(username: string) {
-    return this.userRepository.findOne(username);
+  async findAll(): Promise<UserDAO[]> {
+    return this.userRepository.findAll();
   }
 }
