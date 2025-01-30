@@ -12,6 +12,7 @@ import { Public } from 'src/common/decorators/public.decorator';
 import { Role } from 'src/contracts/enums/roles.enum';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { LoginDTO } from './dto/auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -21,8 +22,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Public()
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  signIn(@Body() payload: LoginDTO) {
+    return this.authService.signIn(payload);
   }
 
   @ApiBearerAuth()
