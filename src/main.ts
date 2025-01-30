@@ -8,6 +8,7 @@ async function bootstrap() {
     .setTitle('Web Template Backend')
     .setDescription('Web Template Backend API')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
