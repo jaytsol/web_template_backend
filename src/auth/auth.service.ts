@@ -3,19 +3,19 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDAO, SignUpDAO } from './dao/auth.dao';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signIn(input: LoginDAO): Promise<{ access_token: string }> {
-    const user = await this.usersService.findOne(input.username);
+    const user = await this.userService.findOne(input.username);
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -33,6 +33,6 @@ export class AuthService {
   }
 
   async signUp(input: SignUpDAO): Promise<any> {
-    return await this.usersService.create(input);
+    return await this.userService.create(input);
   }
 }

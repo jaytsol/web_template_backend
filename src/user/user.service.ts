@@ -4,7 +4,7 @@ import { UserDAO } from './dao/user.dao';
 import { UserRepository } from './user.repository';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserDAO> {
