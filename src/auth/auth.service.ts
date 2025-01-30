@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDAO, SignUpDAO } from './dao/auth.dao';
@@ -12,9 +16,15 @@ export class AuthService {
 
   async signIn(input: LoginDAO): Promise<{ access_token: string }> {
     const user = await this.usersService.findOne(input.username);
-    if (user?.password !== input.password) {
-      throw new UnauthorizedException();
+
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
+
+    if (user.password !== input.password) {
+      throw new BadRequestException('Invalid password');
+    }
+
     const payload = { username: user.username, password: user.password };
 
     return {
@@ -23,7 +33,6 @@ export class AuthService {
   }
 
   async signUp(input: SignUpDAO): Promise<any> {
-    const user = await this.usersService.create(input);
-    return user;
+    return await this.usersService.create(input);
   }
 }
