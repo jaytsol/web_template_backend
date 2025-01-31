@@ -22,7 +22,9 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.password !== input.password) {
+    const isMatch = await bcrypt.compare(input.password, user.password);
+
+    if (!isMatch) {
       throw new BadRequestException('Invalid password');
     }
 
