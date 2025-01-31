@@ -6,6 +6,7 @@ import {
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDAO, SignUpDAO } from './dao/auth.dao';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -33,6 +34,15 @@ export class AuthService {
   }
 
   async signUp(input: SignUpDAO): Promise<any> {
-    return await this.userService.create(input);
+    const hashedPassword = async (password) => {
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      return await bcrypt.hash(password, salt);
+    };
+
+    return await this.userService.create({
+      ...input,
+      password: await hashedPassword(input.password),
+    });
   }
 }
