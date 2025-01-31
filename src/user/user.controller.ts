@@ -11,7 +11,7 @@ export class UserController {
 
   @Get('me')
   findMe(@Request() req) {
-    return this.userService.findOne(req.user.id);
+    return this.userService.findByUserName(req.user.username);
   }
 
   @Get('all')
