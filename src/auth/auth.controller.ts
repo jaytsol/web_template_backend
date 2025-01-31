@@ -9,10 +9,9 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from 'src/common/decorators/public.decorator';
-import { Role } from 'src/contracts/enums/roles.enum';
-import { Roles } from 'src/common/decorators/roles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDTO, SignUpDTO } from './dto/auth.dto';
+import { UserEntity } from 'src/user/entity/user.entity';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -34,9 +33,8 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @Roles(Role.Admin, Role.User)
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    return new UserEntity(req.user);
   }
 }
