@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/user.dto';
 import { UserDAO } from './dao/user.dao';
 import { UserRepository } from './user.repository';
+import { ObjectId } from 'mongoose';
 
 @Injectable()
 export class UserService {
@@ -11,11 +12,15 @@ export class UserService {
     return this.userRepository.create(createUserDto);
   }
 
+  async findOne(id: ObjectId): Promise<UserDAO> {
+    return this.userRepository.findById(id);
+  }
+
   async findAll(): Promise<UserDAO[]> {
     return this.userRepository.findAll();
   }
 
-  async findOne(username: string) {
-    return this.userRepository.findOne(username);
+  async findByUserName(username: string): Promise<UserDAO> {
+    return this.userRepository.findByUserName(username);
   }
 }
