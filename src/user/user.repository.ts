@@ -10,15 +10,15 @@ export class UserRepository {
   ) {}
 
   async findById(id: ObjectId): Promise<UserDAO | null> {
-    return this.userModel.findById(id).exec();
+    return this.userModel.findById(id).lean().exec();
   }
 
   async findByUserName(username: string): Promise<UserDAO | null> {
-    return this.userModel.findOne({ username }).exec();
+    return this.userModel.findOne({ username }).lean().exec();
   }
 
   async findAll(): Promise<UserDAO[]> {
-    return this.userModel.find().exec();
+    return this.userModel.find().lean().exec();
   }
 
   async create(user: UserDAO): Promise<UserDAO> {
@@ -27,7 +27,10 @@ export class UserRepository {
   }
 
   async update(id: string, user: UserDAO): Promise<UserDAO | null> {
-    return this.userModel.findByIdAndUpdate(id, user, { new: true }).exec();
+    return this.userModel
+      .findByIdAndUpdate(id, user, { new: true })
+      .lean()
+      .exec();
   }
 
   async delete(id: string): Promise<void> {

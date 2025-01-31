@@ -2,6 +2,7 @@ import { Controller, Get, Request, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ObjectId, Types } from 'mongoose';
+import { UserEntity } from './entity/user.entity';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -10,13 +11,15 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
-  findMe(@Request() req) {
-    return this.userService.findByUserName(req.user.username);
+  async findMe(@Request() req) {
+    const user = await this.userService.findByUserName(req.user.username);
+    return new UserEntity(user);
   }
 
   @Get('all')
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    const users = await this.userService.findAll();
+    return users.map((user) => new UserEntity(user));
   }
 
   @Get()
@@ -26,7 +29,8 @@ export class UserController {
     type: 'string',
     example: `${new Types.ObjectId()}`,
   })
-  findOne(@Query('id') id: ObjectId) {
-    return this.userService.findOne(id);
+  async findOne(@Query('id') id: ObjectId) {
+    const user = await this.userService.findOne(id);
+    return new UserEntity(user);
   }
 }
