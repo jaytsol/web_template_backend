@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ObjectId, Types } from 'mongoose';
 import { UserEntity } from './entity/user.entity';
+import { plainToClass } from 'class-transformer';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -13,7 +14,10 @@ export class UserController {
   @Get('me')
   async findMe(@Request() req) {
     const user = await this.userService.findByUserName(req.user.username);
-    return new UserEntity(user);
+    const result = plainToClass(UserEntity, user, {
+      excludeExtraneousValues: true,
+    });
+    return result;
   }
 
   @Get('all')
