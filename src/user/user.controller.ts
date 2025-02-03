@@ -1,23 +1,27 @@
-import { Controller, Get, Request, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Request,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ObjectId, Types } from 'mongoose';
 import { UserEntity } from './entity/user.entity';
-import { plainToClass } from 'class-transformer';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 
 @ApiBearerAuth()
 @ApiTags('User')
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('me')
   async findMe(@Request() req) {
     const user = await this.userService.findByUserName(req.user.username);
-    const result = plainToClass(UserEntity, user, {
-      excludeExtraneousValues: true,
-    });
-    return result;
+    return new UserEntity(user);
   }
 
   @Get('all')
